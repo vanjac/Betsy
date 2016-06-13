@@ -66,8 +66,11 @@ public class BetsyBot implements Bot {
 	private static final String[] pBeResponse = {
 		"I can be what I want to be.", "Don't tell me how to live my life."
 	};
+	private static final String[] pDoResponse = {
+		"Don't tell me how to live my life."
+	};
 	private static final String[] pThinkResponse = {
-		"I am unable to think."
+		"I am unable to think.", "I am incapable of thinking."
 	};
 	
 	private final LexicalizedParser parser;
@@ -318,21 +321,14 @@ public class BetsyBot implements Bot {
 			
 		}
 		if(verb.equals("do")) {
-			
-		}
-		if(verb.equals("say")) {
-			
+			return randomPhrase(pDoResponse);
 		}
 		if(verb.equals("think")) {
 			return randomPhrase(pThinkResponse);
 		}
-		if(verb.equals("give")) {
-			
-		}
-		if(verb.equals("find")) {
-			
-		}
-		if(verb.equals("tell") || verb.equals("show")) {
+		if(verb.equals("tell") || verb.equals("show") || verb.equals("give")
+				|| verb.equals("find") || verb.equals("say")
+				|| verb.equals("write")) {
 			String indirectObjectResponse =
 					checkForInvalidIndirectObject(verbPhrase);
 			if(indirectObjectResponse != null)
@@ -378,9 +374,6 @@ public class BetsyBot implements Bot {
 		if(verb.equals("keep")) {
 			
 		}
-		if(verb.equals("write")) {
-			
-		}
 		if(verb.equals("believe")) {
 			
 		}
@@ -397,7 +390,7 @@ public class BetsyBot implements Bot {
 			
 		}
 		if(verb.equals("stop")) {
-			
+			return randomPhrase(pDoResponse);
 		}
 		if(verb.equals("describe")) {
 			
