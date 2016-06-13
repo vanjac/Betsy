@@ -28,9 +28,13 @@ public class BetsyBot implements Bot {
 	private static final boolean DEBUG_LOG = false;
 	
 	private static final String WELCOME_MESSAGE =
-			"Hello! I'm Betsy.\n"
-			+ "Please speak to me in simple, complete sentences,"
-			+ " with correct grammar, capitalization, and punctuation.";
+			"Hello! I'm Betsy the chatbot.\n"
+			+ "Type in the box below. Please speak in simple, complete"
+			+ " sentences with correct grammar, capitalization, and"
+			+ " punctuation. You can see how I interpreted your sentence to"
+			+ " the right.\n"
+			+ "Click Reset when you are done to leave it ready for the next"
+			+ " person.";
 	private static final String CLOSING_MESSAGE = "Goodbye!";
 	
 	private static final String PARSER_MODEL =
@@ -75,6 +79,12 @@ public class BetsyBot implements Bot {
 	};
 	private static final String[] pDoResponse = {
 		"I can do what I want.", "Don't tell me how to live my life."
+	};
+	private static final String[] pHello = {
+		"Hello!", "Hi."
+	};
+	private static final String[] pGoodbye = {
+		"Bye!", "Goodbye."
 	};
 	
 	private final LexicalizedParser parser;
@@ -179,17 +189,18 @@ public class BetsyBot implements Bot {
 		if(respond) {
 			int lastTokenIndex = tokens.size()-1;
 			String lastToken = tokens.get(lastTokenIndex).toString();
-			if(lastToken.equals("?")) {
+			
+			if(TokenUtils.isPunctuation(lastToken.charAt(0))) {
 				lastTokenIndex--;
 				lastToken = tokens.get(lastTokenIndex).toString();
-				
-				if(lastToken.toLowerCase().equals("betsy")) {
+			}
+			
+			if(lastToken.toLowerCase().equals("betsy")) {
+				tokens.remove(lastTokenIndex);
+				lastTokenIndex--;
+				lastToken = tokens.get(lastTokenIndex).toString();
+				if(TokenUtils.isPunctuation(lastToken.charAt(0)))
 					tokens.remove(lastTokenIndex);
-					lastTokenIndex--;
-					lastToken = tokens.get(lastTokenIndex).toString();
-					if(TokenUtils.isPunctuation(lastToken.charAt(0)))
-						tokens.remove(lastTokenIndex);
-				}
 			}
 			
 			if(tokens.size() > 2) {
@@ -483,7 +494,9 @@ public class BetsyBot implements Bot {
 	
 	private String interpretInterjection(String word) {
 		if(word.equals("hi") || word.equals("hello") || word.equals("hey"))
-			return "Hello!";
+			return randomPhrase(pHello);
+		if(word.equals("goodbye") || word.equals("bye"))
+			return randomPhrase(pGoodbye);
 		if(word.equals("thank") || word.equals("thanks"))
 			return "You're welcome.";
 		if(word.equals("suh") || word.equals("asuh"))

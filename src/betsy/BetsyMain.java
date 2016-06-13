@@ -50,23 +50,22 @@ public class BetsyMain {
 		
 		logOut.println("Waiting for frame...");
 		while(!logger.isReady());
-		out.println("Setting up...");
+		out.println("Please wait...");
 		
 		logOut.println("Making bot...");
 		bot = makeBot();
 		
-		String welcomeMessage = bot.init(true);
-		
-		out.println("You are now speaking with " + bot.getName() + ".\n");
+		out.println();
 		
 		// initialize the bot and print a welcome message
-		botOut.println(welcomeMessage);
+		botOut.println(bot.init(true));
 		
 		conversationComplete = false;
 		while(!conversationComplete) {
 			if(logger.resetClicked()) {
 				bot.close(false);
-				botOut.println("Resetting...");
+				out.println("Please wait...");
+				out.println();
 				botOut.println(bot.init(true));
 			}
 			
