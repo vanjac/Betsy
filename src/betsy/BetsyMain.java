@@ -172,10 +172,6 @@ public class BetsyMain {
 			botOut.println(bot.init(true));
 			return;
 		}
-		if(words[0].equals("suh")) {
-			botOut.println("asuh dude");
-			return;
-		}
 		
 		err.println("Unrecognized command!");
 		return;

@@ -171,7 +171,7 @@ public class BetsyBot implements Bot {
 	    return response;
 	}
 	
-	private WordTree<StructureTag> interpretSentence(List<CoreLabel> tokens,
+	private void interpretSentence(List<CoreLabel> tokens,
 			boolean respond) {
 		logOut.println("User said: " + TokenUtils.detokenize(tokens));
 		
@@ -191,7 +191,26 @@ public class BetsyBot implements Bot {
 						tokens.remove(lastTokenIndex);
 				}
 			}
+			
+			if(tokens.size() > 2) {
+				while(tokens.size() > 0) {
+					String firstToken = tokens.get(0).toString().toLowerCase();
+					if(firstToken.equals("well") || firstToken.equals("so")
+							|| firstToken.equals("okay")
+							|| firstToken.equals("betsy")
+							|| TokenUtils.isPunctuation(firstToken.charAt(0)))
+						tokens.remove(0);
+					else
+						break;
+				}
+				
+			}
 		}
+		
+		logOut.println(tokens);
+		
+		if(tokens.size() == 0)
+			return;
 		
 		Tree tree = parser.apply(tokens);
 	    WordTree<Tag> wordTree = Tag.fromTree(tree);
@@ -216,7 +235,7 @@ public class BetsyBot implements Bot {
 	    }
 	    
 	    logOut.println();
-	    return parseTree;
+	    return;
 	}
 	
 	@SuppressWarnings("incomplete-switch")
@@ -465,6 +484,8 @@ public class BetsyBot implements Bot {
 	private String interpretInterjection(String word) {
 		if(word.equals("hi") || word.equals("hello") || word.equals("hey"))
 			return "Hello!";
+		if(word.equals("thank") || word.equals("thanks"))
+			return "You're welcome.";
 		if(word.equals("suh") || word.equals("asuh"))
 			return "asuh dude";
 		
