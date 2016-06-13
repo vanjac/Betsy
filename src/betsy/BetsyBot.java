@@ -40,25 +40,29 @@ public class BetsyBot implements Bot {
 	
 	// Phrase lists
 	private static final String[] pError = {
-		"Something went wrong.", "An error occured."
+		"ERROR!"
 	};
 	private static final String[] pUnable = {
-		"That is beyond my capabilities.", "I am unable to do that."
+		"I am unable to %s.", "I am not able to %s.",
+		"To %s is beyond my capabilities.", "I don't know how to %s",
+		"I can't %s"
 	};
 	private static final String[] pClarifyFragment = {
-		"What about %s?", "What about it?"
+		"What about %s?", "What about it?", "What do you mean?"
 	};
 	private static final String[] pGenericInterjectionResponse = {
-		"Indeed.", "I agree.", "Quite."
+		"Indeed.", "I agree.", "Quite.", "Truly."
 	};
 	private static final String[] pDontKnow = {
-		"I don't know %s.", "I'm not sure about %s.", "Who knows %s."
+		"I don't know %s.", "I'm not sure about %s."
 	};
 	private static final String[] pTalkToUnknownPerson = {
-		"I can only speak to you.", "I can't talk to %s.", "I don't know %s."
+		"I can only speak to you.", "I can't talk to %s.", "I don't know %s.",
+		"I don't know who %s is."
 	};
 	private static final String[] pTalkToYourself = {
-		"I don't usually talk to myself.", "I value my sanity."
+		"I don't often talk to myself.", "I avoid talking to myself.",
+		"I value my sanity."
 	};
 	private static final String[] pTellMeWhat = {
 		"What should I tell you?", "Tell you what?"
@@ -70,10 +74,7 @@ public class BetsyBot implements Bot {
 		"I can be what I want to be.", "Don't tell me how to live my life."
 	};
 	private static final String[] pDoResponse = {
-		"Don't tell me how to live my life."
-	};
-	private static final String[] pThinkResponse = {
-		"I am unable to think.", "I am incapable of thinking."
+		"I can do what I want.", "Don't tell me how to live my life."
 	};
 	
 	private final LexicalizedParser parser;
@@ -327,7 +328,7 @@ public class BetsyBot implements Bot {
 			return randomPhrase(pDoResponse);
 		}
 		if(verb.equals("think")) {
-			return randomPhrase(pThinkResponse);
+			return format(randomPhrase(pUnable), verb);
 		}
 		if(verb.equals("tell") || verb.equals("show") || verb.equals("give")
 				|| verb.equals("find") || verb.equals("say")
@@ -380,7 +381,7 @@ public class BetsyBot implements Bot {
 				return randomPhrase(pTryWhat);
 			}
 			if(!object.hasType(VERB_PHRASE)) {
-				return randomPhrase(pUnable);
+				return format(randomPhrase(pUnable), verb);
 			}
 			WordTree<StructureTag> tryVerbPhrase = object.getType(VERB_PHRASE);
 			
@@ -414,7 +415,7 @@ public class BetsyBot implements Bot {
 		if(interpretInterjection != null)
 			return interpretInterjection;
 		
-		return randomPhrase(pUnable);
+		return format(randomPhrase(pUnable), verb);
 	}
 	
 	/**
