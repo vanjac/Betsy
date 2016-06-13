@@ -89,14 +89,18 @@ public class BetsyBot implements Bot {
 		"Bye!", "Goodbye."
 	};
 	private static final String[] pRepeatedSentence = {
-		"Stop saying that.", "You already said that.", "You just said that."
+		"Stop saying that.", "You already said that.", "You just said that.",
+		"Again?"
 	};
 	private static final String[] pRepeatedQuestion = {
 		"I just told you.", "Stop asking me that.",
-		"I thought I already told you."
+		"I thought I already told you.", "Again?"
 	};
 	private static final String[] pNumbers = {
 		"I'm not good at math.", "I can't count."
+	};
+	private static final String[] pQuestionFragment = {
+		"What do you mean?", "%s what?"
 	};
 	
 	private final LexicalizedParser parser;
@@ -367,7 +371,7 @@ public class BetsyBot implements Bot {
 			}
 			break;
 		case QUESTION_FRAGMENT:
-			response = phrase + "?";
+			response = format(randomPhrase(pQuestionFragment), phrase);
 			break;
 		}
 		
