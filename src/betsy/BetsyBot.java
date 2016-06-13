@@ -60,6 +60,9 @@ public class BetsyBot implements Bot {
 	private static final String[] pTalkToYourself = {
 		"I don't usually talk to myself.", "I value my sanity."
 	};
+	private static final String[] pTellMeWhat = {
+		"What should I tell you?"
+	};
 	private static final String[] pBeResponse = {
 		"I can be what I want to be.", "Don't tell me how to live my life."
 	};
@@ -329,19 +332,41 @@ public class BetsyBot implements Bot {
 		if(verb.equals("find")) {
 			
 		}
-		if(verb.equals("tell")) {
+		if(verb.equals("tell") || verb.equals("show")) {
 			String indirectObjectResponse =
 					checkForInvalidIndirectObject(verbPhrase);
 			if(indirectObjectResponse != null)
 				return indirectObjectResponse;
+			WordTree<StructureTag> object = verbPhrase.getType(OBJECT);
+			if(object == null)
+				return randomPhrase(pTellMeWhat);
+			if(object.numChildren() == 0)
+				return randomPhrase(pTellMeWhat);
+			WordTree<StructureTag> objectChild = object.getChild(0);
+			
+			//construct a question tree
+			WordTree<StructureTag> question = new WordTree<>(QUESTION);
+			WordTree<StructureTag> subject = new WordTree<>(SUBJECT);
+			question.addChild(subject);
+			subject.addChild(objectChild.clone());
+			WordTree<StructureTag> action = new WordTree<>(ACTION);
+			question.addChild(action);
+			WordTree<StructureTag> actionVerbPhrase =
+					new WordTree<>(VERB_PHRASE);
+			action.addChild(actionVerbPhrase);
+			actionVerbPhrase.addChild(new WordTree<>(VERB, "be"));
+			actionVerbPhrase.addChild(new WordTree<>(TENSE_TIME, "PRESENT"));
+			actionVerbPhrase.addChild(new WordTree<>(TENSE_FRAME, "SIMPLE"));
+			WordTree<StructureTag> actionObject = new WordTree<>(OBJECT);
+			actionVerbPhrase.addChild(actionObject);
+			WordTree<StructureTag> actionObjectNounPhrase
+				= new WordTree<>(NOUN_PHRASE);
+			actionObject.addChild(actionObjectNounPhrase);
+			actionObjectNounPhrase.addChild(
+					new WordTree<>(QUESTION_PRONOUN, "what"));
+			return interpretPhrase(question, true);
 		}
 		if(verb.equals("ask")) {
-			String indirectObjectResponse =
-					checkForInvalidIndirectObject(verbPhrase);
-			if(indirectObjectResponse != null)
-				return indirectObjectResponse;
-		}
-		if(verb.equals("show")) {
 			String indirectObjectResponse =
 					checkForInvalidIndirectObject(verbPhrase);
 			if(indirectObjectResponse != null)
