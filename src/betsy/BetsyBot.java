@@ -88,12 +88,22 @@ public class BetsyBot implements Bot {
 	private static final String[] pGoodbye = {
 		"Bye!", "Goodbye."
 	};
+	private static final String[] pRepeatedSentence = {
+		"Stop saying that.", "You already said that.", "You just said that."
+	};
+	private static final String[] pRepeatedQuestion = {
+		"I just told you.", "Stop asking me that.",
+		"I thought I already told you."
+	};
 	
 	private final LexicalizedParser parser;
 	private PrintStream logOut;
 	
 	private QuestionMemory memory;
 	private Context context;
+	// the last sentence the user said as a list of tokens, not including
+	// punctuation
+	private List<String> lastSentence;
 	
 	private final SentenceConstructor constructor;
 	
@@ -138,6 +148,7 @@ public class BetsyBot implements Bot {
 		logOut.println("Initializing bot...");
 		context = new Context();
 		memory = new ScoredQuestionMemory(logOut);
+		lastSentence = new ArrayList<>();
 		
 		PrintStream logOutTemp = logOut;
 		if(!DEBUG_LOG) // prevent logging while interpreting knowledge
@@ -217,6 +228,7 @@ public class BetsyBot implements Bot {
 					String firstToken = tokens.get(0).toString().toLowerCase();
 					if(firstToken.equals("well") || firstToken.equals("so")
 							|| firstToken.equals("okay")
+							|| firstToken.equals("but")
 							|| firstToken.equals("betsy")
 							|| TokenUtils.isPunctuation(firstToken.charAt(0)))
 						tokens.remove(0);
@@ -227,10 +239,28 @@ public class BetsyBot implements Bot {
 			}
 		}
 		
+		// check if the user just said that
+		
+		List<String> tokensWithoutPunctuation = new ArrayList<>();
+		for(CoreLabel l : tokens) {
+			String s = l.toString().toLowerCase();
+			if(!TokenUtils.isPunctuation(s.charAt(0)))
+				tokensWithoutPunctuation.add(s);
+		}
 		logOut.println(tokens);
 		
-		if(tokens.size() == 0)
+		if(tokensWithoutPunctuation.size() == 0)
 			return;
+		
+		if(tokensWithoutPunctuation.equals(lastSentence)) {
+			if(tokens.get(tokens.size() - 1).toString().equals("?"))
+				this.response = randomPhrase(pRepeatedQuestion);
+			else
+				this.response = randomPhrase(pRepeatedSentence);
+			return;
+		}
+		
+		lastSentence = tokensWithoutPunctuation;
 		
 		Tree tree = parser.apply(tokens);
 	    WordTree<Tag> wordTree = Tag.fromTree(tree);
