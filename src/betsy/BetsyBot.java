@@ -95,6 +95,9 @@ public class BetsyBot implements Bot {
 		"I just told you.", "Stop asking me that.",
 		"I thought I already told you."
 	};
+	private static final String[] pNumbers = {
+		"I'm not good at math."
+	};
 	
 	private final LexicalizedParser parser;
 	private PrintStream logOut;
