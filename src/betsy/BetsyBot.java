@@ -237,6 +237,7 @@ public class BetsyBot implements Bot {
 							|| firstToken.equals("okay")
 							|| firstToken.equals("but")
 							|| firstToken.equals("betsy")
+							|| firstToken.equals("ok")
 							|| TokenUtils.isPunctuation(firstToken.charAt(0)))
 						tokens.remove(0);
 					else
@@ -557,6 +558,8 @@ public class BetsyBot implements Bot {
 			return randomPhrase(pGoodbye);
 		if(word.equals("thank") || word.equals("thanks"))
 			return "You're welcome.";
+		if(word.equals("same"))
+			return "I know right.";
 		if(word.equals("sup"))
 			return "sup";
 		if(word.equals("suh") || word.equals("asuh"))
