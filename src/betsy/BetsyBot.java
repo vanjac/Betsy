@@ -61,7 +61,10 @@ public class BetsyBot implements Bot {
 		"I don't usually talk to myself.", "I value my sanity."
 	};
 	private static final String[] pTellMeWhat = {
-		"What should I tell you?"
+		"What should I tell you?", "Tell you what?"
+	};
+	private static final String[] pTryWhat = {
+		"What should I try?", "Try what?"
 	};
 	private static final String[] pBeResponse = {
 		"I can be what I want to be.", "Don't tell me how to live my life."
@@ -328,7 +331,7 @@ public class BetsyBot implements Bot {
 		}
 		if(verb.equals("tell") || verb.equals("show") || verb.equals("give")
 				|| verb.equals("find") || verb.equals("say")
-				|| verb.equals("write")) {
+				|| verb.equals("write") || verb.equals("read")) {
 			String indirectObjectResponse =
 					checkForInvalidIndirectObject(verbPhrase);
 			if(indirectObjectResponse != null)
@@ -368,11 +371,25 @@ public class BetsyBot implements Bot {
 			if(indirectObjectResponse != null)
 				return indirectObjectResponse;
 		}
-		if(verb.equals("try")) {
+		if(verb.equals("try") || verb.equals("keep")) {
+			if(!verbPhrase.hasType(OBJECT)) {
+				return randomPhrase(pTryWhat);
+			}
+			WordTree<StructureTag> object = verbPhrase.getType(OBJECT);
+			if(object.numChildren() == 0) {
+				return randomPhrase(pTryWhat);
+			}
+			if(!object.hasType(VERB_PHRASE)) {
+				return randomPhrase(pUnable);
+			}
+			WordTree<StructureTag> tryVerbPhrase = object.getType(VERB_PHRASE);
 			
-		}
-		if(verb.equals("keep")) {
-			
+			//construct a command tree
+			WordTree<StructureTag> command = new WordTree<>(COMMAND);
+			WordTree<StructureTag> action = new WordTree<>(ACTION);
+			command.addChild(action);
+			action.addChild(tryVerbPhrase);
+			return interpretPhrase(command, true);
 		}
 		if(verb.equals("believe")) {
 			
@@ -381,9 +398,6 @@ public class BetsyBot implements Bot {
 			
 		}
 		if(verb.equals("let")) {
-			
-		}
-		if(verb.equals("read")) {
 			
 		}
 		if(verb.equals("remember")) {
