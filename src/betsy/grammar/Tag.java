@@ -6,15 +6,14 @@ import java.util.ArrayList;
 
 /**
  * Tags used by Penn Treebank to categorize words and phrases in a sentence.
+ * sources:
+ * catalog.ldc.upenn.edu/docs/LDC99T42/tagguid1.pdf
+ * web.mit.edu/6.863/www/PennTreebankTags.html
+ * www.comp.leeds.ac.uk/amalgam/tagsets/upenn.html
  * @author jacob
  *
  */
 public enum Tag {
-	
-	// sources:
-	// catalog.ldc.upenn.edu/docs/LDC99T42/tagguid1.pdf
-	// web.mit.edu/6.863/www/PennTreebankTags.html
-	// www.comp.leeds.ac.uk/amalgam/tagsets/upenn.html
 	
 	ROOT("ROOT", StructuralType.OTHER),
 	UNKNOWN("", StructuralType.OTHER),

@@ -18,6 +18,8 @@ import betsy.grammar.*;
  * responses. It has a textbox at the bottom for user input, which can be
  * disabled, and a large, resizable text area for output. These have
  * InputStreams and OutputStreams controlling them.
+ * It also has a reset button for clearing the bot's memory, and a graphical
+ * display of the WordTree the bot generated from the user's input sentence.
  * @author jacob
  *
  */
@@ -115,13 +117,17 @@ public class LogFrame extends JFrame {
 	}
 	
 	/**
-	 * Display a WordTree graphically in the log window
-	 * @author jacob
+	 * Display a WordTree graphically in the log window. Appends to any
+	 * existing WordTrees.
+	 * @param tree The WordTree to add to the display
 	 */
 	public void addTree(WordTree<StructureTag> tree) {
 		control.addTree(tree);
 	}
 	
+	/**
+	 * Remove all WordTrees from the graphical display.
+	 */
 	public void clearTree() {
 		control.clearTree();
 	}

@@ -75,6 +75,7 @@ public class RecursiveStructureParser implements SentenceStructureParser {
 		}
 	}
 	
+	@SuppressWarnings("incomplete-switch")
 	private void fixTree(WordTree<StructureTag> tree) {
 		StructureTag tag = tree.getType();
 		
@@ -104,7 +105,8 @@ public class RecursiveStructureParser implements SentenceStructureParser {
 								verbPhrase.getType(OBJECT));
 						WordTree<StructureTag> subject =
 								new WordTree<>(SUBJECT);
-						subject.addChild(noun);
+						if(noun != null)
+							subject.addChild(noun);
 						tree.addChild(subject);
 					}
 				}
