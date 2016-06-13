@@ -290,7 +290,8 @@ public class LogFrame extends JFrame {
 			}
 			
 			List<WordTree<StructureTag>> children = t.getChildren();
-			if(type.isA(StructureTag.CategoryTag.SINGLE_CHILD)) {
+			if(type.isA(StructureTag.CategoryTag.SINGLE_CHILD)
+					&& !type.equals(StructureTag.QUESTION_FRAGMENT)) {
 				if(t.numChildren() == 1) {
 					children = t.getChild(0).getChildren();
 				}
