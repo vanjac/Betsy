@@ -56,8 +56,8 @@ public class ScoredQuestionMemory implements QuestionMemory {
 	
 	private float getScore(WordTree<StructureTag> question,
 			WordTree<StructureTag> answer) {
-		int score = 0;
-		int total = 0;
+		float score = 0;
+		float total = 0;
 		
 		// including IGNOREDs but not including ANSWERs
 		List<String> qLeafWords = new ArrayList<>();
@@ -116,7 +116,6 @@ public class ScoredQuestionMemory implements QuestionMemory {
 				aTrees.remove(bestMatch);
 			}
 		}
-		
 		if(total == 0)
 			return 0;
 		else
