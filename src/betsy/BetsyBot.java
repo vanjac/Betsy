@@ -1,6 +1,7 @@
 package betsy;
 
 import java.io.IOException;
+import java.io.PipedOutputStream;
 import java.io.PrintStream;
 import java.util.*;
 import java.nio.file.Paths;
@@ -28,7 +29,8 @@ public class BetsyBot implements Bot {
 	private static final boolean DEBUG_LOG = false;
 	
 	private static final String WELCOME_MESSAGE =
-			"Hello! I'm Betsy the chatbot.\n"
+			"Hello! I'm Betsy the Chatbot, an advanced artificial"
+			+ " intelligence program.\n"
 			+ "Type in the box below. Please speak in simple, complete"
 			+ " sentences with correct grammar, capitalization, and"
 			+ " punctuation. You can see how I interpreted your sentence to"
@@ -48,8 +50,8 @@ public class BetsyBot implements Bot {
 	};
 	private static final String[] pUnable = {
 		"I am unable to %s.", "I am not able to %s.",
-		"To %s is beyond my capabilities.", "I don't know how to %s",
-		"I can't %s"
+		"To %s is beyond my capabilities.", "I don't know how to %s.",
+		"I can't %s.", "I am not human. I can not %s."
 	};
 	private static final String[] pClarifyFragment = {
 		"What about %s?", "What about it?", "What do you mean?"
@@ -88,7 +90,7 @@ public class BetsyBot implements Bot {
 	};
 	
 	private final LexicalizedParser parser;
-	private final PrintStream logOut;
+	private PrintStream logOut;
 	
 	private QuestionMemory memory;
 	private Context context;
@@ -107,9 +109,11 @@ public class BetsyBot implements Bot {
 		formatStringBuilder = new StringBuilder();
 		formatter = new Formatter(formatStringBuilder);
 		constructor = new RecursiveSentenceConstructor(logOut);
-		logOut.println("  Initializing parser...");
+		if(DEBUG_LOG)
+			logOut.println("  Initializing parser...");
 		parser = LexicalizedParser.loadModel(PARSER_MODEL);
-		logOut.println("  Loading knowledge...");
+		if(DEBUG_LOG)
+			logOut.println("  Loading knowledge...");
 		Names.loadNames();
 		Path knowledgePath = Paths.get(KNOWLEDGE_FILE);
 		try {
@@ -118,9 +122,9 @@ public class BetsyBot implements Bot {
 			e.printStackTrace();
 			return;
 		}
-		logOut.println("  Loading dictionary...");
+		if(DEBUG_LOG)
+			logOut.println("  Loading dictionary...");
 		Vocab.init();
-		logOut.println("  Done.");
 	}
 	
 
@@ -135,14 +139,19 @@ public class BetsyBot implements Bot {
 		context = new Context();
 		memory = new ScoredQuestionMemory(logOut);
 		
-		logOut.println("  Interpreting knowledge...");
+		PrintStream logOutTemp = logOut;
+		if(!DEBUG_LOG) // prevent logging while interpreting knowledge
+			logOut = new PrintStream(new PipedOutputStream());
 		for(String fact : knowledge) {
 			interpret(fact, false);
 			//clear context each time
 			context = new Context();
 		}
+		logOut = logOutTemp;
+		
 		logOut.println("  Done.");
-		logOut.println("\n\n");
+		logOut.println();
+		logOut.println("Ready.");
 		if(!DEBUG_LOG)
 			BetsyMain.logger.clearTree();
 		
@@ -167,7 +176,7 @@ public class BetsyBot implements Bot {
 		logOut.println("User said " + sentences.size() + " sentence(s)");
 		logOut.println();
 		
-		response = randomPhrase(pError);
+		response = "";
 		
 		int i = 0;
 	    for(List<CoreLabel> sentence : sentences) {
@@ -313,7 +322,7 @@ public class BetsyBot implements Bot {
 			}
 			break;
 		case QUESTION_FRAGMENT:
-			response = sentence;
+			response = phrase + "?";
 			break;
 		}
 		
@@ -499,6 +508,8 @@ public class BetsyBot implements Bot {
 			return randomPhrase(pGoodbye);
 		if(word.equals("thank") || word.equals("thanks"))
 			return "You're welcome.";
+		if(word.equals("sup"))
+			return "sup";
 		if(word.equals("suh") || word.equals("asuh"))
 			return "asuh dude";
 		

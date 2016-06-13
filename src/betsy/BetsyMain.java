@@ -20,7 +20,6 @@ public class BetsyMain {
 	// input and output streams:
 	public static PrintStream out; // for non-bot messages to the user
 	public static BufferedReader in; // for user input
-	public static PrintStream err; // for errors
 	public static PrintStream logOut; // for debugging and demonstration
 	public static PrintStream botOut; // for messages from the bot
 	
@@ -41,19 +40,19 @@ public class BetsyMain {
 	}
 	
 	public static void main(String[] args) throws IOException {
+		logOut = System.out;
+		logOut.println("Setting up user interface...");
 		logger = new LogFrame();
 		out = new PrintStream(logger.outputStream());
 		in = new BufferedReader(new InputStreamReader(logger.inputStream()));
-		err = System.err;
-		logOut = System.out;
 		botOut = out;
 		
-		logOut.println("Waiting for frame...");
 		while(!logger.isReady());
 		out.println("Please wait...");
 		
-		logOut.println("Making bot...");
+		logOut.println("Creating bot...");
 		bot = makeBot();
+		logOut.println("  Done.");
 		
 		out.println();
 		
@@ -172,7 +171,7 @@ public class BetsyMain {
 			return;
 		}
 		
-		err.println("Unrecognized command!");
+		out.println("Unrecognized command!");
 		return;
 	}
 }
