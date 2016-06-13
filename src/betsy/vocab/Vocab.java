@@ -108,8 +108,13 @@ public class Vocab {
 		List<String> newWordsList = new ArrayList<>();
 		
 		for(String s : words) {
-			if(contractions.containsKey(s.toLowerCase())) {
-				for(String word : contractions.get(s.toLowerCase()))
+			String key1 = s.toLowerCase();
+			String key2 = key1.replace("'", "");
+			if(contractions.containsKey(key1)) {
+				for(String word : contractions.get(key1))
+					newWordsList.add(word);
+			} else if(contractions.containsKey(key2)) {
+				for(String word : contractions.get(key2))
 					newWordsList.add(word);
 			} else if(s.toLowerCase().endsWith("'s")) {
 				newWordsList.add(s.substring(0, s.length()-2));
