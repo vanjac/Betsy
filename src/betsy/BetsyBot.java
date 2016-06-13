@@ -96,7 +96,7 @@ public class BetsyBot implements Bot {
 		"I thought I already told you."
 	};
 	private static final String[] pNumbers = {
-		"I'm not good at math."
+		"I'm not good at math.", "I can't count."
 	};
 	
 	private final LexicalizedParser parser;
@@ -256,14 +256,26 @@ public class BetsyBot implements Bot {
 			return;
 		
 		if(tokensWithoutPunctuation.equals(lastSentence)) {
-			if(tokens.get(tokens.size() - 1).toString().equals("?"))
-				this.response = randomPhrase(pRepeatedQuestion);
-			else
-				this.response = randomPhrase(pRepeatedSentence);
+			if(respond) {
+				if(tokens.get(tokens.size() - 1).toString().equals("?"))
+					this.response = randomPhrase(pRepeatedQuestion);
+				else
+					this.response = randomPhrase(pRepeatedSentence);
+			}
 			return;
 		}
 		
 		lastSentence = tokensWithoutPunctuation;
+		
+		// check for numbers
+		for(String s : tokensWithoutPunctuation) {
+			try {
+				Integer.parseInt(s);
+				if(respond)
+					this.response = randomPhrase(pNumbers);
+				return;
+			} catch (NumberFormatException e) { }
+		}
 		
 		Tree tree = parser.apply(tokens);
 	    WordTree<Tag> wordTree = Tag.fromTree(tree);
