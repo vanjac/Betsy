@@ -179,17 +179,17 @@ public class BetsyBot implements Bot {
 		if(respond) {
 			int lastTokenIndex = tokens.size()-1;
 			String lastToken = tokens.get(lastTokenIndex).toString();
-			if(TokenUtils.isPunctuation(lastToken.charAt(0))) {
+			if(lastToken.equals("?")) {
 				lastTokenIndex--;
 				lastToken = tokens.get(lastTokenIndex).toString();
-			}
-			if(lastToken.toLowerCase().equals("betsy")) {
-				tokens.remove(lastTokenIndex);
-				lastTokenIndex--;
-				lastToken = tokens.get(lastTokenIndex).toString();
-				if(TokenUtils.isPunctuation(lastToken.charAt(0)))
+				
+				if(lastToken.toLowerCase().equals("betsy")) {
 					tokens.remove(lastTokenIndex);
-				logOut.println(tokens);
+					lastTokenIndex--;
+					lastToken = tokens.get(lastTokenIndex).toString();
+					if(TokenUtils.isPunctuation(lastToken.charAt(0)))
+						tokens.remove(lastTokenIndex);
+				}
 			}
 		}
 		
