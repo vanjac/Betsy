@@ -9,3 +9,11 @@ Betsy is a chatbot written in Java. It:
 
 Betsy isn't very interesting to talk to, has very bad grammar and often doesn't know what you're talking about.
 But it can still be entertaining sometimes.
+
+[The Code](https://github.com/vanjac/Betsy/tree/master/src/betsy)
+
+[The Documentation](http://rawgit.com/vanjac/Betsy/master/doc/index.html)
+
+[How it Works](https://prezi.com/qwxte8zbwk0j/how-betsy-works/)
+
+[Download](https://github.com/vanjac/vanjac.github.io/blob/master/files/BetsyApp.jar?raw=true)
