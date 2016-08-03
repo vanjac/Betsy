@@ -6,10 +6,6 @@ import betsy.vocab.VerbInfo.*;
 import net.sf.extjwnl.dictionary.Dictionary;
 import static net.sf.extjwnl.data.POS.*;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -56,14 +52,8 @@ public class Vocab {
 	}
 	
 	private static void loadContractions() {
-		Path p = Paths.get(CONTRACTIONS_FILE);
-		List<String> lines;
-		try {
-			lines = Files.readAllLines(p);
-		} catch (IOException e) {
-			e.printStackTrace();
-			return;
-		}
+		List<String> lines =
+				betsy.BetsyMain.getResourceLines(CONTRACTIONS_FILE);
 		
 		contractions = new HashMap<>();
 		for(String s : lines) {
@@ -77,14 +67,8 @@ public class Vocab {
 	
 	private static void loadPastTenseVerbs() {
 		pastTenseVerbs = new HashMap<>();
-		Path p = Paths.get(PAST_TENSE_VERBS_FILE);
-		List<String> lines;
-		try {
-			lines = Files.readAllLines(p);
-		} catch (IOException e) {
-			e.printStackTrace();
-			return;
-		}
+		List<String> lines =
+				betsy.BetsyMain.getResourceLines(PAST_TENSE_VERBS_FILE);
 		
 		for(String s : lines) {
 			int spaceIndex = s.indexOf(' ');

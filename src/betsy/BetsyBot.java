@@ -1,12 +1,8 @@
 package betsy;
 
-import java.io.IOException;
 import java.io.PipedOutputStream;
 import java.io.PrintStream;
 import java.util.*;
-import java.nio.file.Paths;
-import java.nio.file.Files;
-import java.nio.file.Path;
 
 import edu.stanford.nlp.ling.CoreLabel;
 import edu.stanford.nlp.ling.Sentence;
@@ -132,13 +128,7 @@ public class BetsyBot implements Bot {
 		if(DEBUG_LOG)
 			logOut.println("  Loading knowledge...");
 		Names.loadNames();
-		Path knowledgePath = Paths.get(KNOWLEDGE_FILE);
-		try {
-			knowledge = Files.readAllLines(knowledgePath);
-		} catch (IOException e) {
-			e.printStackTrace();
-			return;
-		}
+		knowledge = betsy.BetsyMain.getResourceLines(KNOWLEDGE_FILE);
 		if(DEBUG_LOG)
 			logOut.println("  Loading dictionary...");
 		Vocab.init();

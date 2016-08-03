@@ -1,10 +1,6 @@
 package betsy.vocab;
 
 import java.util.List;
-import java.nio.file.Paths;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 
 /**
  * The names class has static methods and variables that keep track of lists of
@@ -29,16 +25,8 @@ public class Names {
 	 * Load the names from files, and store them in maleNames and femaleNames.
 	 */
 	public static void loadNames() {
-		Path maleFile = Paths.get(NAMES_MALE_FILE);
-		Path femaleFile = Paths.get(NAMES_FEMALE_FILE);
-		
-		try {
-			maleNames = Files.readAllLines(maleFile);
-			femaleNames = Files.readAllLines(femaleFile);
-		} catch (IOException e) {
-			e.printStackTrace();
-			return;
-		}
+		maleNames = betsy.BetsyMain.getResourceLines(NAMES_MALE_FILE);
+		femaleNames = betsy.BetsyMain.getResourceLines(NAMES_FEMALE_FILE);
 		for(int i = 0; i < maleNames.size(); i++) {
 			maleNames.set(i, maleNames.get(i).toLowerCase());
 		}

@@ -3,6 +3,9 @@ package betsy;
 // number of uncommented lines of code: \n[\s]*[^/*\s]
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import betsy.log.*;
 
@@ -29,6 +32,12 @@ public class BetsyMain {
 	private static String lastUserMessage;
 	private static String lastBotMessage;
 	private static boolean conversationComplete;
+	
+	public static List<String> getResourceLines(String s) {
+		InputStream stream = ClassLoader.getSystemResourceAsStream(s);
+		return new BufferedReader(new InputStreamReader(stream,
+				StandardCharsets.UTF_8)).lines().collect(Collectors.toList());
+	}
 	
 	
 	/**
