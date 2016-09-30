@@ -16,4 +16,4 @@ But it can still be entertaining sometimes.
 
 [How it Works](https://prezi.com/qwxte8zbwk0j/how-betsy-works/)
 
-[Download](https://github.com/vanjac/vanjac.github.io/blob/master/files/BetsyApp.jar?raw=true)
+[Download](https://github.com/vanjac/Betsy/releases)
