@@ -548,13 +548,7 @@ public class BetsyBot implements Bot {
 			return randomPhrase(pGoodbye);
 		if(word.equals("thank") || word.equals("thanks"))
 			return "You're welcome.";
-		if(word.equals("same"))
-			return "I know right.";
-		if(word.equals("sup"))
-			return "sup";
-		if(word.equals("suh") || word.equals("asuh"))
-			return "asuh dude";
-		
+
 		return null;
 	}
 	
